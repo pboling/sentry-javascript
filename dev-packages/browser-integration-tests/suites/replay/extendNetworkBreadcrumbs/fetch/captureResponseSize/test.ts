@@ -8,7 +8,7 @@ import {
   shouldSkipReplayTest,
 } from '../../../../../utils/replayHelpers';
 
-sentryTest('captures response size from Content-Length header if available', async ({ getLocalTestPath, page }) => {
+sentryTest('captures response size from Content-Length header if available', async ({ getLocalTestUrl, page }) => {
   if (shouldSkipReplayTest()) {
     sentryTest.skip();
   }
@@ -40,7 +40,7 @@ sentryTest('captures response size from Content-Length header if available', asy
     return getReplayPerformanceSpans(recordingEvents).some(span => span.op === 'resource.fetch');
   });
 
-  const url = await getLocalTestPath({ testDir: __dirname });
+  const url = await getLocalTestUrl({ testDir: __dirname });
   await page.goto(url);
 
   await page.evaluate(() => {
@@ -98,7 +98,7 @@ sentryTest('captures response size from Content-Length header if available', asy
   ]);
 });
 
-sentryTest('captures response size without Content-Length header', async ({ getLocalTestPath, page }) => {
+sentryTest('captures response size without Content-Length header', async ({ getLocalTestUrl, page }) => {
   if (shouldSkipReplayTest()) {
     sentryTest.skip();
   }
@@ -130,7 +130,7 @@ sentryTest('captures response size without Content-Length header', async ({ getL
     return getReplayPerformanceSpans(recordingEvents).some(span => span.op === 'resource.fetch');
   });
 
-  const url = await getLocalTestPath({ testDir: __dirname });
+  const url = await getLocalTestUrl({ testDir: __dirname });
   await page.goto(url);
 
   await page.evaluate(() => {
@@ -188,7 +188,7 @@ sentryTest('captures response size without Content-Length header', async ({ getL
   ]);
 });
 
-sentryTest('captures response size from non-text response body', async ({ getLocalTestPath, page }) => {
+sentryTest('captures response size from non-text response body', async ({ getLocalTestUrl, page }) => {
   if (shouldSkipReplayTest()) {
     sentryTest.skip();
   }
@@ -217,7 +217,7 @@ sentryTest('captures response size from non-text response body', async ({ getLoc
     return getReplayPerformanceSpans(recordingEvents).some(span => span.op === 'resource.fetch');
   });
 
-  const url = await getLocalTestPath({ testDir: __dirname });
+  const url = await getLocalTestUrl({ testDir: __dirname });
   await page.goto(url);
 
   await page.evaluate(() => {

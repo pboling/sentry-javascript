@@ -8,7 +8,7 @@ import {
   shouldSkipReplayTest,
 } from '../../../../../utils/replayHelpers';
 
-sentryTest('handles empty headers', async ({ getLocalTestPath, page, browserName }) => {
+sentryTest('handles empty headers', async ({ getLocalTestUrl, page, browserName }) => {
   if (shouldSkipReplayTest()) {
     sentryTest.skip();
   }
@@ -34,7 +34,7 @@ sentryTest('handles empty headers', async ({ getLocalTestPath, page, browserName
     return getReplayPerformanceSpans(recordingEvents).some(span => span.op === 'resource.fetch');
   });
 
-  const url = await getLocalTestPath({ testDir: __dirname });
+  const url = await getLocalTestUrl({ testDir: __dirname });
   await page.goto(url);
 
   await page.evaluate(() => {
@@ -77,7 +77,7 @@ sentryTest('handles empty headers', async ({ getLocalTestPath, page, browserName
   ]);
 });
 
-sentryTest('captures response headers', async ({ getLocalTestPath, page }) => {
+sentryTest('captures response headers', async ({ getLocalTestUrl, page }) => {
   if (shouldSkipReplayTest()) {
     sentryTest.skip();
   }
@@ -108,7 +108,7 @@ sentryTest('captures response headers', async ({ getLocalTestPath, page }) => {
     return getReplayPerformanceSpans(recordingEvents).some(span => span.op === 'resource.fetch');
   });
 
-  const url = await getLocalTestPath({ testDir: __dirname });
+  const url = await getLocalTestUrl({ testDir: __dirname });
   await page.goto(url);
 
   await page.evaluate(() => {
@@ -157,7 +157,7 @@ sentryTest('captures response headers', async ({ getLocalTestPath, page }) => {
   ]);
 });
 
-sentryTest('does not capture response headers if URL does not match', async ({ getLocalTestPath, page }) => {
+sentryTest('does not capture response headers if URL does not match', async ({ getLocalTestUrl, page }) => {
   if (shouldSkipReplayTest()) {
     sentryTest.skip();
   }
@@ -188,7 +188,7 @@ sentryTest('does not capture response headers if URL does not match', async ({ g
     return getReplayPerformanceSpans(recordingEvents).some(span => span.op === 'resource.fetch');
   });
 
-  const url = await getLocalTestPath({ testDir: __dirname });
+  const url = await getLocalTestUrl({ testDir: __dirname });
   await page.goto(url);
 
   await page.evaluate(() => {

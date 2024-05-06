@@ -10,7 +10,7 @@ import {
 
 // Skipping because this test is flaky
 // https://github.com/getsentry/sentry-javascript/issues/10395
-sentryTest.skip('captures request body size when body is sent', async ({ getLocalTestPath, page }) => {
+sentryTest.skip('captures request body size when body is sent', async ({ getLocalTestUrl, page }) => {
   if (shouldSkipReplayTest()) {
     sentryTest.skip();
   }
@@ -34,7 +34,7 @@ sentryTest.skip('captures request body size when body is sent', async ({ getLoca
     return getReplayPerformanceSpans(recordingEvents).some(span => span.op === 'resource.fetch');
   });
 
-  const url = await getLocalTestPath({ testDir: __dirname });
+  const url = await getLocalTestUrl({ testDir: __dirname });
   await page.goto(url);
 
   await page.evaluate(() => {
@@ -95,7 +95,7 @@ sentryTest.skip('captures request body size when body is sent', async ({ getLoca
   ]);
 });
 
-sentryTest('captures request size from non-text request body', async ({ getLocalTestPath, page }) => {
+sentryTest('captures request size from non-text request body', async ({ getLocalTestUrl, page }) => {
   if (shouldSkipReplayTest()) {
     sentryTest.skip();
   }
@@ -119,7 +119,7 @@ sentryTest('captures request size from non-text request body', async ({ getLocal
     return getReplayPerformanceSpans(recordingEvents).some(span => span.op === 'resource.fetch');
   });
 
-  const url = await getLocalTestPath({ testDir: __dirname });
+  const url = await getLocalTestUrl({ testDir: __dirname });
   await page.goto(url);
 
   await page.evaluate(() => {
