@@ -16,7 +16,7 @@ export const feedbackModalIntegration = ((): FeedbackModalIntegration => {
       const user = getCurrentScope().getUser() || getIsolationScope().getUser() || getGlobalScope().getUser();
 
       const el = DOCUMENT.createElement('div');
-      const style = createDialogStyles();
+      const style = createDialogStyles(options);
 
       let originalOverflow = '';
       const dialog = {
@@ -45,30 +45,17 @@ export const feedbackModalIntegration = ((): FeedbackModalIntegration => {
         },
       };
 
-      const screenshotInput = screenshotIntegration && screenshotIntegration.createInput(h, dialog);
+      const screenshotInput = screenshotIntegration && screenshotIntegration.createInput(h, dialog, options);
 
       const renderContent = (open: boolean): void => {
         render(
           <Dialog
+            options={options}
             screenshotInput={screenshotInput}
-            showBranding={options.showBranding}
             showName={options.showName || options.isNameRequired}
             showEmail={options.showEmail || options.isEmailRequired}
-            isNameRequired={options.isNameRequired}
-            isEmailRequired={options.isEmailRequired}
-            formTitle={options.formTitle}
-            cancelButtonLabel={options.cancelButtonLabel}
-            submitButtonLabel={options.submitButtonLabel}
-            emailLabel={options.emailLabel}
-            emailPlaceholder={options.emailPlaceholder}
-            messageLabel={options.messageLabel}
-            messagePlaceholder={options.messagePlaceholder}
-            nameLabel={options.nameLabel}
-            namePlaceholder={options.namePlaceholder}
             defaultName={(userKey && user && user[userKey.name]) || ''}
             defaultEmail={(userKey && user && user[userKey.email]) || ''}
-            successMessageText={options.successMessageText}
-            isRequiredText={options.isRequiredText}
             onFormClose={() => {
               renderContent(false);
               options.onFormClose && options.onFormClose();
