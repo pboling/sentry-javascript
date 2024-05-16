@@ -120,12 +120,7 @@ export type { StackFrame } from './stackframe';
 export type { Stacktrace, StackParser, StackLineParser, StackLineParserFn } from './stacktrace';
 export type { PropagationContext, TracePropagationTargets } from './tracing';
 export type { StartSpanOptions } from './startSpanOptions';
-export type {
-  CustomSamplingContext,
-  SamplingContext,
-  TraceparentData,
-  TransactionSource,
-} from './transaction';
+export type { CustomSamplingContext, SamplingContext, TraceparentData, TransactionSource } from './transaction';
 export type {
   DurationUnit,
   InformationUnit,
@@ -161,10 +156,15 @@ export type {
 
 export type { BrowserClientReplayOptions, BrowserClientProfilingOptions } from './browseroptions';
 export type { CheckIn, MonitorConfig, FinishedCheckIn, InProgressCheckIn, SerializedCheckIn } from './checkin';
-export type {
-  MetricsAggregator,
-  MetricBucketItem,
-  MetricInstance,
-} from './metrics';
+export type { MetricsAggregator, MetricBucketItem, MetricInstance } from './metrics';
 export type { ParameterizedString } from './parameterize';
 export type { ViewHierarchyData, ViewHierarchyWindow } from './view-hierarchy';
+export type {
+  RemoteConfigOptions,
+  RemoteConfigInterface,
+  RemoteConfigSource,
+  RemoteConfigStorage,
+  RemoteConfigPayload,
+  RemoteConfigPayloadOptions,
+  RemoteOverrideableConfig,
+} from './remoteconfig';
