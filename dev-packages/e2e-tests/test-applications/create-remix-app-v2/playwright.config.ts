@@ -57,7 +57,7 @@ const config: PlaywrightTestConfig = {
       port: eventProxyPort,
     },
     {
-      command: `PORT=${port} pnpm start`,
+      command: `PORT=${port} NODE_OPTIONS='--require ./instrument.server.cjs' pnpm start`,
       port: port,
     },
   ],
