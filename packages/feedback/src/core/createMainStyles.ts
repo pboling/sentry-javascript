@@ -1,16 +1,50 @@
 import type { FeedbackInternalOptions } from '@sentry/types';
 import { DOCUMENT } from '../constants';
 
-function getThemedCssVariables(theme: FeedbackInternalOptions['themeLight']): string {
+const PURPLE = 'rgba(88, 74, 192, 1)';
+
+interface InternalTheme extends NonNullable<FeedbackInternalOptions['themeLight']> {
+  border: string;
+  interactiveFilter: string;
+}
+
+const DEFAULT_LIGHT: InternalTheme = {
+  foreground: '#2b2233',
+  background: '#ffffff',
+  accentForeground: 'white',
+  accentBackground: PURPLE,
+  successColor: '#268d75',
+  errorColor: '#df3338',
+  border: '1.5px solid rgba(41, 35, 47, 0.13)',
+  boxShadow: '0px 4px 24px 0px rgba(43, 34, 51, 0.12)',
+  outline: '1px auto var(--accent-background)',
+  interactiveFilter: 'brightness(95%)',
+};
+const DEFAULT_DARK: InternalTheme = {
+  foreground: '#ebe6ef',
+  background: '#29232f',
+  accentForeground: 'white',
+  accentBackground: PURPLE,
+  successColor: '#2da98c',
+  errorColor: '#f55459',
+  border: '1.5px solid rgba(41, 35, 47, 0.5)',
+  boxShadow: '0px 4px 24px 0px rgba(43, 34, 51, 0.12)',
+  outline: '1px auto var(--accent-background)',
+  interactiveFilter: 'brightness(150%)',
+};
+
+function getThemedCssVariables(theme: InternalTheme): string {
   return `
-  --background: ${theme.background};
-  --background-hover: ${theme.backgroundHover};
   --foreground: ${theme.foreground};
-  --error: ${theme.error};
-  --success: ${theme.success};
+  --background: ${theme.background};
+  --accent-foreground: ${theme.accentForeground};
+  --accent-background: ${theme.accentBackground};
+  --success-color: ${theme.successColor};
+  --error-color: ${theme.errorColor};
   --border: ${theme.border};
-  --border-radius: ${theme.borderRadius};
   --box-shadow: ${theme.boxShadow};
+  --outline: ${theme.outline};
+  --interactive-filter: ${theme.interactiveFilter};
   `;
 }
 
@@ -21,27 +55,20 @@ export function createMainStyles({ colorScheme, themeDark, themeLight }: Feedbac
   const style = DOCUMENT.createElement('style');
   style.textContent = `
 :host {
-  --z-index: ${themeLight.zIndex};
-  --font-family: ${themeLight.fontFamily};
-  --font-size: ${themeLight.fontSize};
+  --font-family: system-ui, 'Helvetica Neue', Arial, sans-serif;
+  --font-size: 14px;
+  --z-index: 100000;
+
+  --page-margin: 16px;
+  --inset: auto 0 0 auto;
+  --actor-inset: var(--inset);
 
   font-family: var(--font-family);
   font-size: var(--font-size);
 
-  --page-margin: 16px;
-  --actor-inset: auto var(--page-margin) var(--page-margin) auto;
-
-  .brand-link path {
-    fill: ${colorScheme === 'dark' ? '#fff' : '#362d59'};
-  }
-  @media (prefers-color-scheme: dark)
-  {
-    path: {
-      fill: '#fff';
-    }
-  }
-
-  ${getThemedCssVariables(colorScheme === 'dark' ? themeDark : themeLight)}
+  ${getThemedCssVariables(
+    colorScheme === 'dark' ? { ...DEFAULT_DARK, ...themeDark } : { ...DEFAULT_LIGHT, ...themeLight },
+  )}
 }
 
 ${
@@ -49,7 +76,7 @@ ${
     ? `
 @media (prefers-color-scheme: dark) {
   :host {
-    ${getThemedCssVariables(themeDark)}
+    ${getThemedCssVariables({ ...DEFAULT_DARK, ...themeDark })}
   }
 }`
     : ''

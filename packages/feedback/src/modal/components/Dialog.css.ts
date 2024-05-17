@@ -1,4 +1,3 @@
-import type { FeedbackInternalOptions } from '@sentry/types';
 import { DOCUMENT } from '../../constants';
 
 const DIALOG = `
@@ -6,6 +5,7 @@ const DIALOG = `
   position: fixed;
   z-index: var(--z-index);
   margin: 0;
+  inset: 0;
 
   display: flex;
   align-items: center;
@@ -14,6 +14,8 @@ const DIALOG = `
   height: 100vh;
   width: 100vw;
 
+  color: var(--dialog-color, var(--foreground));
+  fill: var(--dialog-color, var(--foreground));
   line-height: 1.75em;
 
   background-color: rgba(0, 0, 0, 0.05);
@@ -21,6 +23,26 @@ const DIALOG = `
   inset: 0;
   opacity: 1;
   transition: opacity 0.2s ease-in-out;
+}
+
+.dialog__position {
+  position: fixed;
+  z-index: var(--z-index);
+  inset: var(--dialog-inset);
+  padding: var(--page-margin);
+  display: flex;
+  max-height: calc(100vh - (2 * var(--page-margin)));
+}
+@media (max-width: 600px) {
+  .dialog__position {
+    inset: var(--page-margin);
+    padding: 0;
+  }
+}
+
+.dialog__position:has(.editor) {
+  inset: var(--page-margin);
+  padding: 0;
 }
 
 .dialog:not([open]) {
@@ -33,33 +55,21 @@ const DIALOG = `
 }
 
 .dialog__content {
-  position: fixed;
-  inset: var(--dialog-inset);
-
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: var(--dialog-padding);
+  padding: var(--dialog-padding, 24px);
   max-width: 100%;
-  max-height: calc(100% - (2 * var(--page-margin)) - (2 * var(--dialog-padding)));
+  width: 100%;
+  max-height: 100%;
   overflow: auto;
 
-  background-color: var(--background);
-  border-radius: var(--form-border-radius);
-  border: var(--border);
-  box-shadow: var(--box-shadow);
-  color: var(--foreground);
+  background: var(--dialog-background, var(--background));
+  border-radius: var(--dialog-border-radius, 20px);
+  border: var(--dialog-border, var(--border));
+  box-shadow: var(--dialog-box-shadow, var(--box-shadow));
   transform: translate(0, 0) scale(1);
   transition: transform 0.2s ease-in-out;
-}
-
-.dialog__content:has(.editor) {
-  inset: var(--page-margin);
-}
-@media (max-width: 600px) {
-  .dialog__content {
-    inset: var(--page-margin);
-  }
 }
 `;
 
@@ -68,12 +78,15 @@ const DIALOG_HEADER = `
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-weight: 600;
+  font-weight: var(--dialog-header-weight, 600);
   margin: 0;
 }
 
 .brand-link {
   display: inline-flex;
+}
+.brand-link:focus-visible {
+  outline: var(--outline);
 }
 `;
 
@@ -87,7 +100,7 @@ const FORM = `
 }
 
 .form__right {
-  width: 272px;
+  width: var(--form-width, 272px);
   display: flex;
   overflow: auto;
   flex-direction: column;
@@ -109,7 +122,8 @@ const FORM = `
 }
 
 .form__error-container {
-  color: var(--error);
+  color: var(--error-foreground);
+  fill: var(--error-foreground);
 }
 
 .form__label {
@@ -132,23 +146,25 @@ const FORM = `
 .form__input {
   font-family: inherit;
   line-height: inherit;
-  background-color: var(--input-background);
+  background: transparent;
   box-sizing: border-box;
-  border: var(--input-border);
-  border-radius: var(--form-content-border-radius);
-  color: var(--input-foreground);
-  font-size: var(--font-size);
-  font-weight: 500;
+  border: var(--input-border, var(--border));
+  border-radius: var(--input-border-radius, 6px);
+  color: var(--input-color, inherit);
+  fill: var(--input-color, inherit);
+  font-size: var(--input-font-size, inherit);
+  font-weight: var(--input-font-weight, 500);
   padding: 6px 12px;
 }
 
 .form__input::placeholder {
-  color: var(--input-foreground);
   opacity: 0.65;
+  color: var(--input-placeholder-color, inherit);
+  filter: var(--interactive-filter);
 }
 
 .form__input:focus-visible {
-  outline: 1px auto var(--input-outline-focus);
+  outline: var(--input-focus-outline, var(--outline));
 }
 
 .form__input--textarea {
@@ -157,7 +173,8 @@ const FORM = `
 }
 
 .error {
-  color: var(--error);
+  color: var(--error-color);
+  fill: var(--error-color);
 }
 `;
 
@@ -169,13 +186,13 @@ const BUTTON = `
 
 .btn {
   line-height: inherit;
-  border: var(--cancel-border);
-  border-radius: var(--form-content-border-radius);
+  border: var(--button-border, var(--border));
+  border-radius: var(--button-border-radius, 6px);
   cursor: pointer;
   font-family: inherit;
-  font-size: var(--font-size);
-  font-weight: 600;
-  padding: 6px 16px;
+  font-size: var(--button-font-size, inherit);
+  font-weight: var(--button-font-weight, 600);
+  padding: var(--button-padding, 6px 16px);
 }
 .btn[disabled] {
   opacity: 0.6;
@@ -183,49 +200,64 @@ const BUTTON = `
 }
 
 .btn--primary {
-  background-color: var(--submit-background);
-  border-color: var(--submit-border);
-  color: var(--submit-foreground);
+  color: var(--button-primary-color, var(--accent-foreground));
+  fill: var(--button-primary-color, var(--accent-foreground));
+  background: var(--button-primary-background, var(--accent-background));
+  border: var(--button-primary-border, var(--border));
+  border-radius: var(--button-primary-border-radius, 6px);
+  font-weight: var(--button-primary-font-weight, 500);
 }
 .btn--primary:hover {
-  background-color: var(--submit-background-hover);
-  color: var(--submit-foreground-hover);
+  color: var(--button-primary-hover-color, var(--accent-foreground));
+  fill: var(--button-primary-hover-color, var(--accent-foreground));
+  background: var(--button-primary-hover-background, var(--accent-background));
+  filter: var(--interactive-filter);
 }
 .btn--primary:focus-visible {
-  outline: 1px auto var(--submit-outline-focus);
+  background: var(--button-primary-hover-background, var(--accent-background));
+  filter: var(--interactive-filter);
+  outline: var(--button-primary-focus-outline, var(--outline));
 }
 
 .btn--default {
-  background-color: var(--cancel-background);
-  color: var(--cancel-foreground);
-  font-weight: 500;
+  color: var(--button-color, var(--foreground));
+  fill: var(--button-color, var(--foreground));
+  background: var(--button-background, var(--background));
+  border: var(--button-border, var(--border));
+  border-radius: var(--button-border-radius, 6px);
+  font-weight: var(--button-font-weight, 500);
 }
 .btn--default:hover {
-  background-color: var(--cancel-background-hover);
-  color: var(--cancel-foreground-hover);
+  color: var(--button-color, var(--foreground));
+  fill: var(--button-color, var(--foreground));
+  background: var(--button-hover-background, var(--background));
+  filter: var(--interactive-filter);
 }
 .btn--default:focus-visible {
-  outline: 1px auto var(--cancel-outline-focus);
+  background: var(--button-hover-background, var(--background));
+  filter: var(--interactive-filter);
+  outline: var(--button-focus-outline, var(--outline));
 }
 `;
 
 const SUCCESS = `
-.success-message {
+.success__position {
   position: fixed;
-  left: var(--left);
-  right: var(--right);
-  bottom: var(--bottom);
-  top: var(--top);
+  inset: var(--dialog-inset);
+  padding: var(--page-margin);
   z-index: var(--z-index);
-
-  background-color: var(--background);
-  border: var(--border);
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  font-weight: 600;
-  color: var(--success);
+}
+.success__content {
+  background: var(--success-background, var(--background));
+  border: var(--success-border, var(--border));
+  border-radius: var(--success-border-radius, 1.7em/50%);
+  box-shadow: var(--success-box-shadow, var(--box-shadow));
+  font-weight: var(--success-font-weight, 600);
+  color: var(--success-color);
+  fill: var(--success-color);
   padding: 12px 24px;
-  line-height: 25px;
+  line-height: 1.75em;
+
   display: grid;
   align-items: center;
   grid-auto-flow: column;
@@ -233,61 +265,20 @@ const SUCCESS = `
   cursor: default;
 }
 
-.success-icon {
+.success__icon {
   display: flex;
 }
 `;
 
-function getThemedCssVariables(theme: FeedbackInternalOptions['themeLight']): string {
-  return `
-  --submit-background: ${theme.submitBackground};
-  --submit-background-hover: ${theme.submitBackgroundHover};
-  --submit-border: ${theme.submitBorder};
-  --submit-outline-focus: ${theme.submitOutlineFocus};
-  --submit-foreground: ${theme.submitForeground};
-  --submit-foreground-hover: ${theme.submitForegroundHover};
-
-  --cancel-background: ${theme.cancelBackground};
-  --cancel-background-hover: ${theme.cancelBackgroundHover};
-  --cancel-border: ${theme.cancelBorder};
-  --cancel-outline-focus: ${theme.cancelOutlineFocus};
-  --cancel-foreground: ${theme.cancelForeground};
-  --cancel-foreground-hover: ${theme.cancelForegroundHover};
-
-  --input-background: ${theme.inputBackground};
-  --input-foreground: ${theme.inputForeground};
-  --input-border: ${theme.inputBorder};
-  --input-outline-focus: ${theme.inputOutlineFocus};
-
-  --form-border-radius: ${theme.formBorderRadius};
-  --form-content-border-radius: ${theme.formContentBorderRadius};
-  `;
-}
-
 /**
  * Creates <style> element for widget dialog
  */
-export function createDialogStyles({ colorScheme, themeDark, themeLight }: FeedbackInternalOptions): HTMLStyleElement {
+export function createDialogStyles(): HTMLStyleElement {
   const style = DOCUMENT.createElement('style');
 
   style.textContent = `
 :host {
-  --dialog-inset: auto var(--page-margin) var(--page-margin) auto;
-  --dialog-padding: 24px;
-
-  ${getThemedCssVariables(colorScheme === 'dark' ? themeDark : themeLight)}
-}
-
-${
-  colorScheme === 'system'
-    ? `
-@media (prefers-color-scheme: dark) {
-  :host {
-    ${getThemedCssVariables(themeDark)}
-  }
-}`
-    : ''
-}
+  --dialog-inset: var(--inset);
 }
 
 ${DIALOG}
