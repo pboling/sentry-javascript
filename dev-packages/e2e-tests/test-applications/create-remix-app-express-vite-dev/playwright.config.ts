@@ -59,8 +59,6 @@ const config: PlaywrightTestConfig = {
     {
       command: `PORT=${port} pnpm dev`,
       port: port,
-      stdout: 'pipe',
-      stderr: 'pipe',
     },
   ],
 };
