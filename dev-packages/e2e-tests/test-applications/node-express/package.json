@@ -14,7 +14,7 @@
     "@sentry/core": "latest || *",
     "@sentry/node": "latest || *",
     "@sentry/types": "latest || *",
-    "@trpc/server": "10.45.2",
+    "@trpc/server": "10.45.3",
     "@trpc/client": "10.45.2",
     "@types/express": "4.17.17",
     "@types/node": "18.15.1",

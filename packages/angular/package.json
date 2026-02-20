@@ -30,10 +30,10 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^14.2.13",
     "@angular/cli": "^14.2.13",
-    "@angular/common": "^14.3.0",
-    "@angular/compiler": "^14.3.0",
+    "@angular/common": "^21.1.5",
+    "@angular/compiler": "^21.1.5",
     "@angular/compiler-cli": "^14.3.0",
-    "@angular/core": "^14.3.0",
+    "@angular/core": "^21.1.5",
     "@angular/platform-browser": "^14.3.0",
     "@angular/platform-browser-dynamic": "^14.3.0",
     "@angular/router": "^14.3.0",
