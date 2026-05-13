@@ -17,9 +17,9 @@
     "test:assert": "pnpm -v"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "8.1.0",
+    "@astrojs/cloudflare": "13.1.10",
     "@sentry/astro": "latest || *",
-    "astro": "4.1.1"
+    "astro": "6.1.10"
   },
   "volta": {
     "extends": "../../package.json"
